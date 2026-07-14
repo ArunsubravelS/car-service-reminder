@@ -1,0 +1,5 @@
+package com.carservice.user.controller;
+
+public class HealthController {
+
+}
