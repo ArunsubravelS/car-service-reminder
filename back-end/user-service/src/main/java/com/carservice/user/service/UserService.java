@@ -11,9 +11,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository repository = null;
+    private final UserRepository repository ;
+    
 
-    public UserResponse register(RegisterRequest request){
+    public UserService(UserRepository repository) {
+		super();
+		this.repository = repository;
+	}
+
+
+	public UserResponse register(RegisterRequest request){
 
         if(repository.findByEmail(request.getEmail()).isPresent()){
             throw new RuntimeException("Email already exists");

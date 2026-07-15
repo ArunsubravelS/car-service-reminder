@@ -18,8 +18,13 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	
 	
-	private final UserService service = null;
+	private final UserService service;
 	
+	  public UserController(UserService service) {
+		super();
+		this.service = service;
+	}
+
 	  @PostMapping("/register")
 	    public UserResponse register(@RequestBody RegisterRequest request){
 
