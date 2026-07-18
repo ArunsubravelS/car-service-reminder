@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class UserResponse {
 
     public Long getId() {
@@ -31,5 +30,8 @@ public class UserResponse {
 	public static Object builder() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public UserResponse() {
+		// TODO Auto-generated constructor stub
 	}
 }

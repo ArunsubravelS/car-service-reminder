@@ -4,39 +4,43 @@ import com.carservice.user.dto.RegisterRequest;
 import com.carservice.user.dto.UserResponse;
 import com.carservice.user.entity.User;
 import com.carservice.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository repository ;
-    
+    private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository) {
-		super();
-		this.repository = repository;
-	}
+    public UserService(UserRepository repository,
+                       PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
+    public UserResponse register(RegisterRequest request) {
 
-	public UserResponse register(RegisterRequest request){
-
-        if(repository.findByEmail(request.getEmail()).isPresent()){
+        if(repository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
 
-        User user=new User();
-        user.setId(request.getId());
-        user.setEmail(request.getEmail());
+        User user = new User();
+
         user.setFullName(request.getFullName());
-        user.setPassword(request.getPassword());
-        
+        user.setEmail(request.getEmail());
+
+        // Encrypt password
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        User saved = repository.save(user);
+
         UserResponse response = new UserResponse();
 
-        response.setId(user.getId());
-        response.setFullName(user.getFullName());
-        response.setEmail(user.getEmail());
+        response.setId(saved.getId());
+        response.setFullName(saved.getFullName());
+        response.setEmail(saved.getEmail());
 
         return response;
     }
